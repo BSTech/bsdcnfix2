@@ -39,7 +39,7 @@ First of all, you need to install node.js (tested on v12.14.1, it should also wo
 - Launch Discord and wait for a notification.
 
 If something goes wrong, simply delete "core.asar" and rename "\_core.asar" back to "core.asar".  
-If you update Discord and this feature gets broken again, just apply the fix again beginning form the first step.
+If you update Discord and this feature gets broken again, just apply the fix again beginning from the first step.
 
 ## Is it legal? (RANT)
 
