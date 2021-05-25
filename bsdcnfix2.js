@@ -1,11 +1,24 @@
 //Author: BSTech
 
-const { writeFileSync, readFileSync } = require('fs');
+const { writeFileSync, readFileSync, readdirSync, existsSync, copyFileSync } = require('fs');
 const { homedir } = require('os');
-let userpath = homedir();
-writeFileSync(`${userpath}\\AppData\\Local\\Discord\\app-1.0.9001\\modules\\discord_desktop_core-1\\discord_desktop_core\\core.asar`, 
-process_archive(readFileSync(`${userpath}\\AppData\\Local\\Discord\\app-1.0.9001\\modules\\discord_desktop_core-1\\discord_desktop_core\\_core.asar`)));
-console.log('Done');
+
+try
+{
+	let userpath = homedir();
+	let progpath = `${userpath}\\AppData\\Local\\Discord`;
+
+	let modpath = findDesktopModule(progpath);
+	console.log(`Found desktop module at: ${modpath}`);
+
+	copyFileSync(`${modpath}\\core.asar`, `${modpath}\\_core.asar`);
+	console.log('Created backup file _core.asar');
+
+	writeFileSync(`${modpath}\\core.asar`, 
+	process_archive(readFileSync(`${modpath}\\_core.asar`)));
+	console.log('Done, launch Discord now');
+}
+catch (error) { console.log(error); }
 
 function process_archive(data)
 {
@@ -93,4 +106,20 @@ function process_archive(data)
 
 	
 	return newData;
+}
+
+function findDesktopModule(progpath)
+{
+	var path = null;
+	var tpath = null;
+	
+	var f = readdirSync(progpath);
+	for (const dir of f) { if (existsSync(tpath = `${progpath}\\${dir}\\modules`)) break; tpath = null; }
+	if (tpath == null) throw 'Cannot find program directory';
+	
+	f = readdirSync(tpath);
+	for (const dir of f) { if (existsSync(path = `${tpath}\\${dir}\\discord_desktop_core`)) break; path = null; }
+	if (path == null) throw 'Cannot find desktop module directory';
+	
+	return path;
 }
