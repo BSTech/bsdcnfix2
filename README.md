@@ -3,6 +3,9 @@ Unofficial Discord Ghost Notification Panel Fixer
 
 If you have questions about the "ToS" legality of this code, please see below.
 
+### Quick info about the new update
+TL;DR: They changed their logo and they still didn't fix this issue.
+
 ## What is the purpose of this tool?
 
 This tool patches a file of the Discord module to fix invisible notifications.
@@ -11,11 +14,11 @@ This is also not the "unclickable screen portion" bug.
 
 ## What is the bug?
 
-Someone at Discord has forgotten to expose&tweak the inter-process communication system to the notification panel renderer.
+Someone at Discord has forgotten to expose&tweak the inter-process communication system to the notification panel renderer. This causes no notification to show on screen, however, you can hear the notification sound.
 
 ## How does this tool work?
 
-This tool patches a file of Discord module (`modules/discord_desktop_core-1/discord_desktop_core/core.asar`) to make it making use of `BrowserWindow` preload scripts with context isolation to fix `require is not defined` error with the following steps:
+This tool patches a file of Discord module (`modules/discord_desktop_core-x/discord_desktop_core/core.asar`) to make it making use of `BrowserWindow` preload scripts with context isolation to fix `require is not defined` error with the following steps:
 
 - It "patches" `notificationScreen.js` to set a preload script called `nspreload.js`
 - It generates `nspreload.js` to expose a relay `require` function, checks what is `require`d and if it is `electron` then it relays `ipcRenderer`'s `on` and `removeListener` functions (electron bug?) since they are made invisible to renderer context, they are finally exposed to renderers as `fix.require_fixed`.
@@ -29,17 +32,17 @@ I also added what patches are applied in the fixer code as a separate file (deta
 
 First of all, you need to install node.js (tested on v12.14.1, it should also work with newer versions). If you have it already or installed it right now:
 
-- Save the file `bsdcnfix2.js` only.
+- Save the file `bsdcnfix2.js` only (do not try save the file directly, click `Raw` button and then save it).
 - Quit Discord.
-- Navigate to Discord app location (AppData > Local > Discord > app-1.0.9001).
-- Navigate to desktop module (modules > discord_desktop_core-1 > discord_desktop_core).
-- Rename core.asar to \_core.asar, this achieves both making a backup in case of breaking something and provides the template for this tool (Do NOT delete this file even after done).
 - Run `node bsdcnfix2` from anywhere you wish (command prompt, powershell, etc.).
-- Check if a new "core.asar" is spawned in the same folder.
 - Launch Discord and wait for a notification.
 
-If something goes wrong, simply delete "core.asar" and rename "\_core.asar" back to "core.asar".  
+__IMPORTANT:__ Do __NOT__ delete backup file even after it is fixed.
+
+If something goes wrong, simply delete "core.asar" and rename "\_core.asar" back to "core.asar" in the folder written on console.  
 If you update Discord and this feature gets broken again, just apply the fix again beginning from the first step.
+
+Previous version was working manually, now it is working automatically.
 
 ## Is it legal? (RANT)
 
