@@ -1,10 +1,8 @@
+# UPDATE: They fixed it after ~4 months. Congrats.
 # bsdcnfix2
 Unofficial Discord Ghost Notification Panel Fixer
 
 If you have questions about the "ToS" legality of this code, please see below.
-
-### Quick info about the new update
-TL;DR: They changed their logo and they still didn't fix this issue.
 
 ## What is the purpose of this tool?
 
